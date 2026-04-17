@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zelfregulatie Trainingstool</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --surface: #fffdf8;
+    --surface2: #eee8d8;
+    --ink: #1a1510;
+    --ink-soft: #5a5040;
+    --accent: #c04a1a;
+    --accent-light: #f0e4dc;
+    --green: #2d7a4a;
+    --green-light: #d8f0e4;
+    --red: #b02828;
+    --red-light: #f8dede;
+    --gold: #d4a017;
+    --border: #ccc0a8;
+    --box-stroke: #1a1510;
+    --highlight: rgba(192, 74, 26, 0.18);
+    --shadow: 0 2px 16px rgba(26,21,16,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 18px 36px;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    border-bottom: 3px solid var(--accent);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.55rem;
+    letter-spacing: -0.01em;
+  }
+  header span {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    font-weight: 300;
+  }
+
+  .app {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 24px 24px 0;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    grid-row: 1 / 3;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .controls {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .controls label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .toggle-group button {
+    padding: 9px 6px;
+    border: none;
+    background: var(--surface);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    transition: background 0.15s, color 0.15s;
+  }
+  .toggle-group button.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .toggle-group button:first-child { border-right: 1px solid var(--border); }
+
+  .btn {
+    padding: 10px 14px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #a03a12; }
+  .btn-primary:disabled { background: var(--border); cursor: not-allowed; }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border); }
+
+  /* ─── QUOTE LIST ─── */
+  .quote-list-container {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 280px);
+  }
+  .quote-list-container h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: var(--ink-soft);
+  }
+
+  .quote-item {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    cursor: grab;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    position: relative;
+    transition: box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+    user-select: none;
+  }
+  .quote-item:active { cursor: grabbing; }
+  .quote-item:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(192,74,26,0.12); }
+  .quote-item.placed {
+    opacity: 0.45;
+    cursor: default;
+    border-style: dashed;
+  }
+  .quote-item.placed:hover { border-color: var(--border); box-shadow: none; }
+  .quote-item.dragging { opacity: 0.2; }
+
+  .quote-num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 20px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  /* ─── DIAGRAM AREA ─── */
+  .diagram-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-left: 4px;
+  }
+
+  .diagram-hint {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .diagram-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9144 / 5143;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  /* SVG fills the wrapper */
+  .diagram-wrapper svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Drop zone overlays */
+  .drop-zone {
+    position: absolute;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+    cursor: default;
+  }
+  .drop-zone.active {
+    background: var(--highlight);
+    border-color: var(--accent);
+  }
+  .drop-zone.has-chip {
+    /* subtle tint when a chip is placed */
+  }
+
+  /* Chips placed on diagram */
+  .placed-chip {
+    position: absolute;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 5px;
+    padding: 3px 7px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    max-width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Ghost drag element */
+  #drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 7px 12px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    max-width: 200px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    opacity: 0.95;
+    display: none;
+  }
+
+  /* ─── FEEDBACK PANEL ─── */
+  .feedback-panel {
+    grid-column: 1 / 3;
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    display: none;
+  }
+  .feedback-panel.visible { display: block; }
+
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .feedback-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+  }
+
+  .grade-badge {
+    background: var(--ink);
+    color: var(--bg);
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    padding: 8px 22px;
+    border-radius: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .fb-card {
+    border-radius: 8px;
+    padding: 14px 16px;
+    border: 1.5px solid;
+    position: relative;
+  }
+  .fb-card.correct {
+    background: var(--green-light);
+    border-color: var(--green);
+  }
+  .fb-card.wrong {
+    background: var(--red-light);
+    border-color: var(--red);
+  }
+  .fb-card .verdict {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .fb-card.correct .verdict { color: var(--green); }
+  .fb-card.wrong .verdict { color: var(--red); }
+  .fb-card .quote-text {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .fb-card .box-info {
+    font-size: 0.78rem;
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  .status-bar {
+    grid-column: 1 / 3;
+    padding: 12px 0 16px;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+  .progress-dot.done { background: var(--accent); }
+
+  @media (max-width: 900px) {
+    .app {
+      grid-template-columns: 250px 1fr;
+      padding: 14px 14px 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Zelfregulatie Trainingstool</h1>
+  <span>Sleep quotes naar het juiste model-onderdeel</span>
+</header>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="controls">
+      <label>Kies quote-type</label>
+      <div class="toggle-group">
+        <button id="btn-client" class="active" onclick="switchMode('client')">Cliënt</button>
+        <button id="btn-coach" onclick="switchMode('coach')">Coach</button>
+      </div>
+      <button class="btn btn-secondary" onclick="newRound()" style="margin-top:4px">↺ Nieuwe ronde</button>
+    </div>
+
+    <div class="quote-list-container">
+      <h3 id="quote-list-title">Cliënt-quotes</h3>
+      <div id="quote-list"></div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-feedback" disabled onclick="showFeedback()">
+      Bekijk feedback →
+    </button>
+  </aside>
+
+  <!-- DIAGRAM -->
+  <div class="diagram-col">
+    <div class="diagram-hint" id="hint-text">
+      Sleep een quote naar een vakje in het model. Vakjes lichten op als de cursor er overheen gaat.
+    </div>
+    <div class="diagram-wrapper" id="diagram-wrapper">
+      <!-- SVG diagram drawn by JS -->
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="progress-dots" id="progress-dots"></div>
+    <span id="status-text">0 van 10 quotes geplaatst</span>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback-panel" id="feedback-panel">
+    <div class="feedback-header">
+      <h2>Feedback</h2>
+      <div class="grade-badge" id="grade-display">—</div>
+    </div>
+    <div class="feedback-grid" id="feedback-grid"></div>
+    <button class="btn btn-secondary" style="margin-top:18px" onclick="newRound()">↺ Nieuwe ronde starten</button>
+  </div>
+
+</div>
+
+<!-- Ghost drag element -->
+<div id="drag-ghost"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════
+
+const BOXES = [
+  { n: 1,  label: 'Kennis over het gedrag',   x:  2.03, y: 49.43, w: 33.57, h:  9.93 },
+  { n: 2,  label: 'Waarden/doelen',           x:  2.03, y: 29.37, w: 25.71, h:  9.93 },
+  { n: 3,  label: 'Probleem oplossen',        x: 24.26, y:  4.22, w: 16.92, h: 17.88 },
+  { n: 4,  label: 'Motivatie',                x: 45.27, y:  8.05, w: 15.63, h:  9.93 },
+  { n: 5,  label: 'Doelstellen',              x: 65.48, y:  4.07, w: 12.02, h: 17.88 },
+  { n: 6,  label: 'Plannen',                  x: 82.12, y:  7.79, w: 13.64, h:  9.93 },
+  { n: 7,  label: 'Implementatie intentie',   x: 73.33, y: 26.18, w: 22.97, h: 17.88 },
+  { n: 8,  label: 'Uitvoering gedrag',        x: 63.07, y: 70.61, w: 26.87, h:  9.93 },
+  { n: 9,  label: 'Zelfcontrole gedrag',      x: 67.10, y: 86.74, w: 28.66, h:  9.93 },
+  { n: 10, label: 'Monitoren',                x: 41.35, y: 70.61, w: 17.13, h:  9.93 },
+  { n: 11, label: 'Evalueren',                x: 20.98, y: 71.29, w: 15.94, h:  9.93 },
+  { n: 12, label: 'Leren',                    x:  6.67, y: 71.29, w: 10.18, h:  9.93 },
+  { n: 13, label: 'Discrepantie',             x: 35.87, y: 39.74, w: 19.48, h:  9.93 },
+];
+
+// Number badge positions extracted from PPTX
+const NUM_POSITIONS = {
+  1:  { x: 2.03,  y: 41.72 },
+  2:  { x: 2.03,  y: 21.49 },
+  3:  { x: 24.26, y:  4.22 },
+  4:  { x: 50.31, y: 15.63 },
+  5:  { x: 63.65, y:  1.51 },
+  6:  { x: 94.66, y:  3.62 },
+  7:  { x: 69.62, y: 25.96 },
+  8:  { x: 85.65, y: 63.45 },
+  9:  { x: 63.80, y: 83.60 },
+  10: { x: 41.35, y: 78.77 },
+  11: { x:  6.57, y: 79.36 },
+  12: { x: 50.97, y: 32.02 },
+  13: null // Discrepantie has no separate number badge
+};
+
+const CLIENT_QUOTES = [
+  { id:'c1',  text:'Waarom is elke dag een glaasje zo slecht?',                                         box:1  },
+  { id:'c2',  text:'Maar gezondheid is niet het enige, plezier hebben is net zo belangrijk.',            box:2  },
+  { id:'c3',  text:'Minder drinken lijkt me geen optie.',                                               box:13 },
+  { id:'c4',  text:'Dat is vast een leuke en effectieve manier om fitter te worden.',                    box:4  },
+  { id:'c5',  text:'Ik ga elke week drie keer wandelen.',                                               box:5  },
+  { id:'c6',  text:'Ik moet mijn afspraken verplaatsen om te kunnen wandelen.',                         box:6  },
+  { id:'c7',  text:'Om 10.00 gaan we samen 30 minuten om het park wandelen.',                           box:7  },
+  { id:'c8',  text:'Ik heb 35 minuten gewandeld.',                                                      box:8  },
+  { id:'c9',  text:'Als ik een kleiner bord gebruik, dan schep ik minder op.',                          box:9  },
+  { id:'c10', text:'Na 10 minuten ging mijn knie pijn doen maar het ging ook weer weg.',                box:10 },
+  { id:'c11', text:'Wandelen kost wel tijd maar die tijd heb ik toch wel goed besteed.',                box:11 },
+  { id:'c12', text:'Ik voel me echt heel goed na het wandelen.',                                        box:12 },
+  { id:'c13', text:'Het ging weer niet goed, daar baal ik van.',                                        box:13 },
+];
+
+const COACH_QUOTES = [
+  { id:'co1',  text:'Kijk, op deze poster zie je de spieren en deze spieren gebruik je bij wandelen.',  box:1  },
+  { id:'co2',  text:'Wat vind jij belangrijk in het leven?',                                            box:2  },
+  { id:'co3',  text:'Wat vind je er van dat je dat elke dag doet?',                                     box:13 },
+  { id:'co4',  text:'Okay, laten we de mogelijkheden eens op een rij zetten.',                          box:3  },
+  { id:'co5',  text:'Welke optie spreekt jou het meeste aan, wat werkt voor jou?',                      box:4  },
+  { id:'co6',  text:'Hoe ga je dat bereiken?',                                                          box:5  },
+  { id:'co7',  text:'Komt dat wel uit met je werk?',                                                    box:6  },
+  { id:'co8',  text:'Hoe laat ga je precies wandelen, en hoelang?',                                     box:7  },
+  { id:'co9',  text:'Prima, afgesproken, succes.',                                                      box:8  },
+  { id:'co10', text:'Hoe kun je voorkomen dat je toch nog eens chocola pakt.',                          box:9  },
+  { id:'co11', text:'Hoeveel stappen heb je per dag gedaan deze week?',                                 box:10 },
+  { id:'co12', text:'En, hoe ging het verder deze week?',                                               box:11 },
+  { id:'co13', text:'Je hebt laten zien dat jij dat zelf kunt, heel knap.',                             box:12 },
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
+let mode = 'client'; // 'client' | 'coach'
+const ROUND_SIZE = 10;
+let currentQuotes = []; // 10 selected quotes for this round
+let placements = {};    // { quoteId: boxN }
+let dragQuoteId = null;
+
+// ═══════════════════════════════════════════════════════════════
+//  DIAGRAM SVG
+// ═══════════════════════════════════════════════════════════════
+
+// We use a 1000×562.5 coordinate space (matching 16:9 aspect)
+const VW = 1000, VH = 562.5;
+
+function pct(val, total) { return val / 100 * total; }
+
+function buildDiagramSVG() {
+  // Helper to convert % coords to SVG units
+  const X = p => pct(p, VW);
+  const Y = p => pct(p, VH);
+
+  // Box edge helpers
+  const B = {
+    1:  {x:2.03,  y:49.43, w:33.57, h:9.93},
+    2:  {x:2.03,  y:29.37, w:25.71, h:9.93},
+    3:  {x:24.26, y:4.22,  w:16.92, h:17.88},
+    4:  {x:45.27, y:8.05,  w:15.63, h:9.93},
+    5:  {x:65.48, y:4.07,  w:12.02, h:17.88},
+    6:  {x:82.12, y:7.79,  w:13.64, h:9.93},
+    7:  {x:73.33, y:26.18, w:22.97, h:17.88},
+    8:  {x:63.07, y:70.61, w:26.87, h:9.93},
+    9:  {x:67.10, y:86.74, w:28.66, h:9.93},
+    10: {x:41.35, y:70.61, w:17.13, h:9.93},
+    11: {x:20.98, y:71.29, w:15.94, h:9.93},
+    12: {x:6.67,  y:71.29, w:10.18, h:9.93},
+    13: {x:35.87, y:39.74, w:19.48, h:9.93},
+  };
+  const cx = n => B[n].x + B[n].w/2;
+  const cy = n => B[n].y + B[n].h/2;
+  const top = n => B[n].y;
+  const bot = n => B[n].y + B[n].h;
+  const lft = n => B[n].x;
+  const rgt = n => B[n].x + B[n].w;
+
+  // Arrow segments as SVG path strings
+  const arrows = [];
+
+  // ── 1↔2: double-headed vertical, shortened by ~2% on each end ──
+  const x12 = 14.88;
+  arrows.push(`<line x1="${X(x12)}" y1="${Y(bot(2) + 2.0)}" x2="${X(x12)}" y2="${Y(top(1))}"
+    stroke="#1a1510" stroke-width="2.2"
+    marker-start="url(#arrowhead-rev)" marker-end="url(#arrowhead)"/>`);
+
+  // ── 2→13: branches from midpoint of the 1↔2 shaft ──
+  const branchY = (bot(2) + top(1)) / 2;
+  arrows.push(`<line x1="${X(x12)}" y1="${Y(branchY)}" x2="${X(lft(13))}" y2="${Y(cy(13))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 13→3: strictly vertical — x=38.53 is in overlap of both boxes ──
+  const x_13_3 = 38.53;
+  arrows.push(`<line x1="${X(x_13_3)}" y1="${Y(top(13))}" x2="${X(x_13_3)}" y2="${Y(bot(3))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 13→8: single arrow from right of 13, lands on the top border of box8/9 body ──
+  // Endpoint x=cx(8)=76.50, y=top(8)=70.61 (top edge of box 8)
+  arrows.push(`<line x1="${X(rgt(13))}" y1="${Y(cy(13))}" x2="${X(cx(8))}" y2="${Y(top(8))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 3→4: horizontal ──
+  arrows.push(`<line x1="${X(rgt(3))}" y1="${Y(cy(4))}" x2="${X(lft(4))}" y2="${Y(cy(4))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 4→5: horizontal ──
+  arrows.push(`<line x1="${X(rgt(4))}" y1="${Y(cy(4))}" x2="${X(lft(5))}" y2="${Y(cy(4))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 5→6: horizontal ──
+  arrows.push(`<line x1="${X(rgt(5))}" y1="${Y(cy(6))}" x2="${X(lft(6))}" y2="${Y(cy(6))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 6→7: strictly vertical at cx(6)=88.94, inside box7 (73.33–96.30) ──
+  arrows.push(`<line x1="${X(cx(6))}" y1="${Y(bot(6))}" x2="${X(cx(6))}" y2="${Y(top(7))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 7→8: strictly vertical at cx(7)=84.81, inside box8 (63.07–89.94) ──
+  arrows.push(`<line x1="${X(cx(7))}" y1="${Y(bot(7))}" x2="${X(cx(7))}" y2="${Y(top(8))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 7→9: strictly vertical on RIGHT side x=93.0, clear of box8 (ends at 89.94) ──
+  // x=93.0 is inside box7 (73.33–96.30) and box9 (67.10–95.76)
+  const x_79 = 93.0;
+  arrows.push(`<line x1="${X(x_79)}" y1="${Y(bot(7))}" x2="${X(x_79)}" y2="${Y(top(9))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 9→8: strictly vertical upward at cx(8)=76.50, inside box9 (67.10–95.76) ──
+  arrows.push(`<line x1="${X(cx(8))}" y1="${Y(top(9))}" x2="${X(cx(8))}" y2="${Y(bot(8))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 8→10: horizontal left ──
+  arrows.push(`<line x1="${X(lft(8))}" y1="${Y(cy(8))}" x2="${X(rgt(10))}" y2="${Y(cy(8))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 10→11: horizontal left ──
+  arrows.push(`<line x1="${X(lft(10))}" y1="${Y(cy(10))}" x2="${X(rgt(11))}" y2="${Y(cy(10))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 11→12: horizontal left ──
+  arrows.push(`<line x1="${X(lft(11))}" y1="${Y(cy(11))}" x2="${X(rgt(12))}" y2="${Y(cy(11))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  // ── 12→1: vertical up ──
+  arrows.push(`<line x1="${X(cx(12))}" y1="${Y(top(12))}" x2="${X(cx(12))}" y2="${Y(bot(1))}"
+    stroke="#1a1510" stroke-width="2.2" marker-end="url(#arrowhead)"/>`);
+
+  const svgArrows = arrows.join('\n');
+
+  // ── Draw boxes ──
+  let svgBoxes = BOXES.map(b => {
+    const bx = pct(b.x, VW), by = pct(b.y, VH);
+    const bw = pct(b.w, VW), bh = pct(b.h, VH);
+    const rx = 6;
+    const words = b.label.split(' ');
+    let lines = [];
+    let cur = '';
+    words.forEach(w2 => {
+      if ((cur+' '+w2).trim().length > 16) { lines.push(cur.trim()); cur = w2; }
+      else cur = (cur+' '+w2).trim();
+    });
+    if (cur) lines.push(cur);
+    const lineH = 13;
+    const totalTextH = lines.length * lineH;
+    const textY = by + bh/2 - totalTextH/2 + lineH * 0.75;
+    const textLines = lines.map((l,i) =>
+      `<tspan x="${bx+bw/2}" dy="${i===0?0:lineH}">${l}</tspan>`
+    ).join('');
+    return `
+<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${rx}"
+  fill="#fffdf8" stroke="#1a1510" stroke-width="1.8"/>
+<text x="${bx+bw/2}" y="${textY}" text-anchor="middle"
+  font-family="DM Sans,sans-serif" font-size="11" fill="#1a1510" font-weight="500">
+  ${textLines}
+</text>`;
+  }).join('\n');
+
+  // ── Number badges ──
+  let svgNums = BOXES.map(b => {
+    const nx = pct(b.x, VW) + 4;
+    const ny = pct(b.y, VH) + 4;
+    const r = 9;
+    return `
+<circle cx="${nx+r}" cy="${ny+r}" r="${r}" fill="#1a1510"/>
+<text x="${nx+r}" y="${ny+r+4}" text-anchor="middle"
+  font-family="DM Sans,sans-serif" font-size="9" fill="#f5f0e8" font-weight="700">${b.n}</text>`;
+  }).join('\n');
+
+  return `<svg viewBox="0 0 ${VW} ${VH}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#1a1510"/>
+    </marker>
+    <marker id="arrowhead-rev" markerWidth="7" markerHeight="7" refX="1" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#1a1510"/>
+    </marker>
+  </defs>
+  ${svgArrows}
+  ${svgBoxes}
+  ${svgNums}
+</svg>`;
+}
+
+function buildDropZones() {
+  const wrapper = document.getElementById('diagram-wrapper');
+  // Remove old drop zones
+  wrapper.querySelectorAll('.drop-zone, .placed-chip').forEach(el => el.remove());
+
+  BOXES.forEach(b => {
+    const dz = document.createElement('div');
+    dz.className = 'drop-zone';
+    dz.dataset.box = b.n;
+    dz.style.left   = b.x + '%';
+    dz.style.top    = b.y + '%';
+    dz.style.width  = b.w + '%';
+    dz.style.height = b.h + '%';
+    dz.title = b.label;
+    wrapper.appendChild(dz);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  QUOTES
+// ═══════════════════════════════════════════════════════════════
+
+function shuffleAndPick(arr, n) {
+  const copy = [...arr];
+  for (let i = copy.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
+}
+
+function renderQuoteList() {
+  const list = document.getElementById('quote-list');
+  list.innerHTML = '';
+  currentQuotes.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quote-item' + (placements[q.id] !== undefined ? ' placed' : '');
+    div.dataset.id = q.id;
+    div.innerHTML = q.text;
+    if (placements[q.id] === undefined) {
+      div.draggable = true;
+      div.addEventListener('dragstart', onDragStart);
+      div.addEventListener('dragend', onDragEnd);
+      div.addEventListener('touchstart', onTouchStart, {passive:false});
+    }
+    list.appendChild(div);
+  });
+  updateStatus();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DRAG — MOUSE
+// ═══════════════════════════════════════════════════════════════
+
+function onDragStart(e) {
+  dragQuoteId = e.currentTarget.dataset.id;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  // Custom ghost
+  const ghost = document.getElementById('drag-ghost');
+  const q = currentQuotes.find(q => q.id === dragQuoteId);
+  ghost.textContent = q.text;
+  ghost.style.display = 'block';
+  e.dataTransfer.setDragImage(ghost, -99999, -99999); // hide native ghost
+}
+
+function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.getElementById('drag-ghost').style.display = 'none';
+  clearHighlights();
+  dragQuoteId = null;
+}
+
+document.addEventListener('dragover', e => {
+  e.preventDefault();
+  const ghost = document.getElementById('drag-ghost');
+  ghost.style.left = (e.clientX + 14) + 'px';
+  ghost.style.top  = (e.clientY + 10) + 'px';
+
+  // Highlight drop zones
+  const wrapper = document.getElementById('diagram-wrapper');
+  const rect = wrapper.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width * 100;
+  const py = (e.clientY - rect.top)  / rect.height * 100;
+  highlightZones(px, py);
+});
+
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  if (!dragQuoteId) return;
+  const wrapper = document.getElementById('diagram-wrapper');
+  const rect = wrapper.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width * 100;
+  const py = (e.clientY - rect.top)  / rect.height * 100;
+  const box = getBoxAt(px, py);
+  if (box) dropQuote(dragQuoteId, box.n, px, py);
+  clearHighlights();
+  document.getElementById('drag-ghost').style.display = 'none';
+  dragQuoteId = null;
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  DRAG — TOUCH
+// ═══════════════════════════════════════════════════════════════
+
+let touchOffX = 0, touchOffY = 0;
+
+function onTouchStart(e) {
+  if (e.touches.length !== 1) return;
+  e.preventDefault();
+  const el = e.currentTarget;
+  dragQuoteId = el.dataset.id;
+  const touch = e.touches[0];
+  const elRect = el.getBoundingClientRect();
+  touchOffX = touch.clientX - elRect.left;
+  touchOffY = touch.clientY - elRect.top;
+  el.classList.add('dragging');
+  const ghost = document.getElementById('drag-ghost');
+  const q = currentQuotes.find(q => q.id === dragQuoteId);
+  ghost.textContent = q.text;
+  ghost.style.display = 'block';
+  moveTouchGhost(touch.clientX, touch.clientY);
+  el.addEventListener('touchmove', onTouchMove, {passive:false});
+  el.addEventListener('touchend', onTouchEnd);
+}
+
+function onTouchMove(e) {
+  e.preventDefault();
+  const touch = e.touches[0];
+  moveTouchGhost(touch.clientX, touch.clientY);
+  const wrapper = document.getElementById('diagram-wrapper');
+  const rect = wrapper.getBoundingClientRect();
+  const px = (touch.clientX - rect.left) / rect.width * 100;
+  const py = (touch.clientY - rect.top)  / rect.height * 100;
+  highlightZones(px, py);
+}
+
+function onTouchEnd(e) {
+  const touch = e.changedTouches[0];
+  const el = e.currentTarget;
+  el.classList.remove('dragging');
+  el.removeEventListener('touchmove', onTouchMove);
+  el.removeEventListener('touchend', onTouchEnd);
+  document.getElementById('drag-ghost').style.display = 'none';
+  clearHighlights();
+  if (!dragQuoteId) return;
+  const wrapper = document.getElementById('diagram-wrapper');
+  const rect = wrapper.getBoundingClientRect();
+  const px = (touch.clientX - rect.left) / rect.width * 100;
+  const py = (touch.clientY - rect.top)  / rect.height * 100;
+  const box = getBoxAt(px, py);
+  if (box) dropQuote(dragQuoteId, box.n, px, py);
+  dragQuoteId = null;
+}
+
+function moveTouchGhost(cx, cy) {
+  const ghost = document.getElementById('drag-ghost');
+  ghost.style.left = (cx + 14) + 'px';
+  ghost.style.top  = (cy + 10) + 'px';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DROP / PLACEMENT
+// ═══════════════════════════════════════════════════════════════
+
+function getBoxAt(px, py) {
+  return BOXES.find(b =>
+    px >= b.x && px <= b.x + b.w &&
+    py >= b.y && py <= b.y + b.h
+  ) || null;
+}
+
+function highlightZones(px, py) {
+  document.querySelectorAll('.drop-zone').forEach(dz => {
+    const b = BOXES.find(b => b.n == dz.dataset.box);
+    const inside = px >= b.x && px <= b.x+b.w && py >= b.y && py <= b.y+b.h;
+    dz.classList.toggle('active', inside);
+  });
+}
+
+function clearHighlights() {
+  document.querySelectorAll('.drop-zone').forEach(dz => dz.classList.remove('active'));
+}
+
+function dropQuote(qid, boxN, px, py) {
+  // If already placed elsewhere, allow re-placement (remove old chip)
+  if (placements[qid] !== undefined) {
+    removeChip(qid);
+  }
+  placements[qid] = boxN;
+  placeChip(qid, boxN, px, py);
+  renderQuoteList();
+  updateFeedbackBtn();
+}
+
+function placeChip(qid, boxN, px, py) {
+  // Find drop zone for this box
+  const wrapper = document.getElementById('diagram-wrapper');
+  const b = BOXES.find(b => b.n === boxN);
+  // Position chip near center of drop zone
+  const chipX = b.x + b.w / 2;
+  const chipY = b.y + b.h / 2;
+
+  // Check if chip already exists for this quote
+  let chip = wrapper.querySelector(`.placed-chip[data-qid="${qid}"]`);
+  if (!chip) {
+    chip = document.createElement('div');
+    chip.className = 'placed-chip';
+    chip.dataset.qid = qid;
+    wrapper.appendChild(chip);
+  }
+  const q = currentQuotes.find(q => q.id === qid);
+  chip.textContent = `${q.text.substring(0, 28)}${q.text.length > 28 ? '…' : ''}`;
+  chip.style.left = chipX + '%';
+  chip.style.top  = chipY + '%';
+
+  // Stack multiple chips in same box
+  const sibs = wrapper.querySelectorAll(`.placed-chip`);
+  let offset = 0;
+  sibs.forEach(s => {
+    if (s !== chip && s.style.left === chip.style.left) offset += 24;
+  });
+  chip.style.marginTop = offset + 'px';
+}
+
+function removeChip(qid) {
+  const wrapper = document.getElementById('diagram-wrapper');
+  const chip = wrapper.querySelector(`.placed-chip[data-qid="${qid}"]`);
+  if (chip) chip.remove();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  STATUS & FEEDBACK
+// ═══════════════════════════════════════════════════════════════
+
+function updateStatus() {
+  const placed = Object.keys(placements).length;
+  document.getElementById('status-text').textContent = `${placed} van ${ROUND_SIZE} quotes geplaatst`;
+  const dots = document.getElementById('progress-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < ROUND_SIZE; i++) {
+    const d = document.createElement('div');
+    d.className = 'progress-dot' + (i < placed ? ' done' : '');
+    dots.appendChild(d);
+  }
+}
+
+function updateFeedbackBtn() {
+  const placed = Object.keys(placements).length;
+  document.getElementById('btn-feedback').disabled = placed < ROUND_SIZE;
+}
+
+function showFeedback() {
+  const panel = document.getElementById('feedback-panel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  let correct = 0;
+  const grid = document.getElementById('feedback-grid');
+  grid.innerHTML = '';
+
+  currentQuotes.forEach((q, idx) => {
+    const placed = placements[q.id];
+    const isCorrect = placed === q.box;
+    if (isCorrect) correct++;
+    const correctBox = BOXES.find(b => b.n === q.box);
+    const placedBox  = BOXES.find(b => b.n === placed);
+
+    const card = document.createElement('div');
+    card.className = 'fb-card ' + (isCorrect ? 'correct' : 'wrong');
+    card.innerHTML = `
+      <div class="verdict">${isCorrect ? '✓ Correct' : '✗ Fout'}</div>
+      <div class="quote-text">${q.text}</div>
+      <div class="box-info">
+        Jouw antwoord: <strong>${placedBox ? placedBox.n + ' – ' + placedBox.label : '—'}</strong><br>
+        ${isCorrect ? '' : `Juiste antwoord: <strong>${correctBox.n} – ${correctBox.label}</strong>`}
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  const grade = Math.round((correct / ROUND_SIZE) * 9) + 1; // 1–10 scale
+  document.getElementById('grade-display').textContent = grade + ' / 10';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ROUND MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+
+function switchMode(m) {
+  mode = m;
+  document.getElementById('btn-client').classList.toggle('active', m === 'client');
+  document.getElementById('btn-coach').classList.toggle('active', m === 'coach');
+  newRound();
+}
+
+function newRound() {
+  placements = {};
+  dragQuoteId = null;
+  const pool = mode === 'client' ? CLIENT_QUOTES : COACH_QUOTES;
+  currentQuotes = shuffleAndPick(pool, ROUND_SIZE);
+  document.getElementById('quote-list-title').textContent =
+    mode === 'client' ? 'Cliënt-quotes' : 'Coach-quotes';
+
+  // Reset diagram
+  const wrapper = document.getElementById('diagram-wrapper');
+  wrapper.querySelectorAll('.placed-chip').forEach(el => el.remove());
+
+  // Rebuild feedback
+  document.getElementById('feedback-panel').classList.remove('visible');
+  document.getElementById('btn-feedback').disabled = true;
+
+  renderQuoteList();
+  updateStatus();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+
+function init() {
+  const wrapper = document.getElementById('diagram-wrapper');
+  wrapper.innerHTML = buildDiagramSVG();
+  buildDropZones();
+  newRound();
+}
+
+init();
+</script>
+</body>
+</html>
