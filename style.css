@@ -8,7 +8,7 @@
    ============================================================ */
 
 /* ── Google Fonts ─────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 /* ── CSS Custom Properties ────────────────────────────────── */
 :root {
@@ -62,6 +62,27 @@
 
   /* Transitions */
   --transition: 0.25s ease;
+
+  /* ── Variables required by index.html (Zelfregulatie tool) ──
+     The index uses these in its inline <style> block and via JS.
+     Defining them here means the external stylesheet is a valid
+     standalone source for them, in case the inline block is ever
+     removed or the variables are referenced from other pages.   */
+  --bg:            #f5f0e8;
+  --surface:       #fffdf8;
+  --surface2:      #eee8d8;
+  --ink:           #1a1510;
+  --ink-soft:      #5a5040;
+  --accent-light:  #f0e4dc;
+  --green:         #2d7a4a;
+  --green-light:   #d8f0e4;
+  --red:           #b02828;
+  --red-light:     #f8dede;
+  --gold:          #d4a017;
+  --border:        #ccc0a8;
+  --box-stroke:    #1a1510;
+  --highlight:     rgba(192, 74, 26, 0.18);
+  --shadow:        0 2px 16px rgba(26,21,16,0.10);
 }
 
 /* ── Reset & Base ─────────────────────────────────────────── */
