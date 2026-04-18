@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoachPortaal — Startpagina</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  BANNER                          ║
+       ╚══════════════════════════════════╝ -->
+  <header class="site-banner">
+    <!--
+      Wil je een afbeelding in de banner? Verwijder het commentaar hieronder
+      en vervang "banner.jpg" door jouw afbeeldingspad.
+
+      <img
+        class="site-banner__bg"
+        src="banner.jpg"
+        alt=""
+        aria-hidden="true"
+      />
+    -->
+
+    <div class="site-banner__inner">
+      <!--
+        Wil je een logo of avatar naast de tekst? Verwijder het commentaar:
+
+        <img
+          class="site-banner__logo"
+          src="logo.png"
+          alt="Logo CoachPortaal"
+        />
+      -->
+
+      <div class="site-banner__text">
+        <span class="site-banner__eyebrow">Professionele ontwikkeling</span>
+        <h1 class="site-banner__title">CoachPortaal</h1>
+        <p class="site-banner__subtitle">
+          Jouw leer- en werkomgeving voor coaching, theorie en zelfreflectie.
+          Kies hieronder waarmee je aan de slag wilt.
+        </p>
+      </div>
+    </div>
+
+    <div class="site-banner__bar"></div>
+  </header>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  MAIN CONTENT                    ║
+       ╚══════════════════════════════════╝ -->
+  <main class="site-main">
+    <div class="container">
+
+      <!-- Intro tekst -->
+      <section style="margin-bottom: var(--space-xl);">
+        <span class="label">Welkom</span>
+        <h2 class="heading-display" style="margin-top: var(--space-xs); margin-bottom: var(--space-md);">
+          Waar wil je vandaag mee beginnen?
+        </h2>
+        <p class="lead">
+          Dit portaal biedt je alle tools die je nodig hebt als coach: begeleid
+          een cliënt, verdiep je in de theorie, raadpleeg relevante literatuur
+          of toets je eigen kennis. Klik op een van de knoppen hieronder om
+          direct te starten.
+        </p>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- Vier navigatietegels -->
+      <nav aria-label="Hoofdnavigatie modules">
+        <div class="btn-grid">
+
+          <!-- 1. Coach een client -->
+          <a href="aicoach.html" class="btn-tile">
+            <span class="btn-tile__icon" aria-hidden="true">🧑‍💼</span>
+            <span>Coach een cliënt</span>
+            <span class="btn-tile__label">Begeleid een coachingsgesprek</span>
+          </a>
+
+          <!-- 2. Leer de theorie -->
+          <a href="theoriecoach.html" class="btn-tile">
+            <span class="btn-tile__icon" aria-hidden="true">📖</span>
+            <span>Leer de theorie</span>
+            <span class="btn-tile__label">Verdiep je vakkennis</span>
+          </a>
+
+          <!-- 3. Relevante literatuur -->
+          <a href="litcoach.html" class="btn-tile">
+            <span class="btn-tile__icon" aria-hidden="true">📚</span>
+            <span>Relevante literatuur</span>
+            <span class="btn-tile__label">Bronnen en aanbevolen werken</span>
+          </a>
+
+          <!-- 4. Toets jezelf -->
+          <a href="toetscoach.html" class="btn-tile">
+            <span class="btn-tile__icon" aria-hidden="true">✅</span>
+            <span>Toets jezelf</span>
+            <span class="btn-tile__label">Test je kennis en inzichten</span>
+          </a>
+
+        </div>
+      </nav>
+
+    </div>
+  </main>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  FOOTER                          ║
+       ╚══════════════════════════════════╝ -->
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> CoachPortaal. Alle rechten voorbehouden.</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
