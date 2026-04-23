@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gedragsverandering — Begrippenkaart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── CSS vars from style.css ─────────────────────── */
+    :root {
+      --color-oker:        #D4A017;
+      --color-oker-light:  #E8C060;
+      --color-oker-dark:   #A87C0C;
+      --color-blauw:       #0D1F3C;
+      --color-blauw-mid:   #163260;
+      --color-blauw-light: #1E4080;
+      --color-zwart:       #111111;
+      --color-wit:         #F7F4EE;
+      --color-grijs-licht: #EDE9E0;
+      --color-grijs:       #C8C4B8;
+      --font-body:         'Source Sans 3', 'Segoe UI', sans-serif;
+      --shadow-sm:         0 2px 6px rgba(13,31,60,.15);
+      --shadow-md:         0 6px 20px rgba(13,31,60,.28);
+      --shadow-lg:         0 20px 56px rgba(13,31,60,.45);
+      --radius-md:         10px;
+      --radius-lg:         18px;
+      --transition:        0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-blauw);
+      color: var(--color-wit);
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem 5rem;
+      background-image:
+        radial-gradient(ellipse at 10% 0%,   rgba(212,160,23,.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 100%, rgba(30,64,128,.5)   0%, transparent 55%);
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    .page-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      animation: fadeDown .6s ease both;
+    }
+    .page-header .eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--color-oker);
+      display: block;
+      margin-bottom: .55rem;
+    }
+    .page-header h1 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--color-wit);
+      margin-bottom: .4rem;
+    }
+    .page-header p {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--color-grijs);
+    }
+    .page-header::after {
+      content: '';
+      display: block;
+      width: 52px;
+      height: 4px;
+      background: var(--color-oker);
+      border-radius: 99px;
+      margin: 1rem auto 0;
+    }
+
+    /* ── Grid ────────────────────────────────────────── */
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: .85rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 860px) { .term-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 560px) { .term-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 380px) { .term-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ── Term Button ─────────────────────────────────── */
+    .term-btn {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: .55rem .4rem;
+      border-radius: var(--radius-md);
+      border: 2px solid rgba(212,160,23,.25);
+      background: rgba(22,50,96,.55);
+      color: var(--color-wit);
+      font-family: var(--font-body);
+      font-size: .72rem;
+      font-weight: 600;
+      line-height: 1.25;
+      cursor: pointer;
+      transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+      animation: fadeUp .5s ease both;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* staggered entrance */
+    .term-btn:nth-child(1)  { animation-delay: .03s; }
+    .term-btn:nth-child(2)  { animation-delay: .06s; }
+    .term-btn:nth-child(3)  { animation-delay: .09s; }
+    .term-btn:nth-child(4)  { animation-delay: .12s; }
+    .term-btn:nth-child(5)  { animation-delay: .15s; }
+    .term-btn:nth-child(6)  { animation-delay: .18s; }
+    .term-btn:nth-child(7)  { animation-delay: .21s; }
+    .term-btn:nth-child(8)  { animation-delay: .24s; }
+    .term-btn:nth-child(9)  { animation-delay: .27s; }
+    .term-btn:nth-child(10) { animation-delay: .30s; }
+    .term-btn:nth-child(11) { animation-delay: .33s; }
+    .term-btn:nth-child(12) { animation-delay: .36s; }
+    .term-btn:nth-child(13) { animation-delay: .39s; }
+    .term-btn:nth-child(14) { animation-delay: .42s; }
+    .term-btn:nth-child(15) { animation-delay: .45s; }
+    .term-btn:nth-child(16) { animation-delay: .48s; }
+    .term-btn:nth-child(17) { animation-delay: .51s; }
+    .term-btn:nth-child(18) { animation-delay: .54s; }
+    .term-btn:nth-child(n+19) { animation-delay: .57s; }
+
+    .term-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212,160,23,.18), transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .term-btn:hover::before { opacity: 1; }
+
+    .term-btn:hover {
+      background: rgba(212,160,23,.2);
+      border-color: var(--color-oker);
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: var(--shadow-md), 0 0 0 2px rgba(212,160,23,.3);
+      color: var(--color-oker-light);
+    }
+
+    .term-btn.is-open {
+      background: rgba(212,160,23,.22);
+      border-color: var(--color-oker);
+      color: var(--color-oker-light);
+    }
+
+    /* ── Popup cards ─────────────────────────────────── */
+    .popup-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 900;
+    }
+
+    .popup {
+      position: absolute;
+      width: 300px;
+      background: var(--color-wit);
+      color: var(--color-zwart);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid rgba(212,160,23,.4);
+      overflow: hidden;
+      pointer-events: auto;
+      animation: popIn .28s cubic-bezier(.34,1.4,.64,1) both;
+      display: flex;
+      flex-direction: column;
+      /* starts at a staggered position, set via JS */
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.88) translateY(10px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+
+    .popup__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .7rem .9rem .5rem;
+      background: var(--color-blauw);
+      cursor: grab;
+      user-select: none;
+      gap: .5rem;
+    }
+    .popup__header:active { cursor: grabbing; }
+
+    .popup__title {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--color-oker);
+      letter-spacing: .04em;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .popup__close {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(212,160,23,.2);
+      color: var(--color-oker);
+      font-size: .8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background var(--transition), transform var(--transition);
+      line-height: 1;
+    }
+    .popup__close:hover {
+      background: var(--color-oker);
+      color: var(--color-blauw);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .popup__illus {
+      width: 100%;
+      height: 130px;
+      background: var(--color-grijs-licht);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .popup__illus svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .popup__body {
+      padding: .85rem 1rem 1rem;
+    }
+
+    .popup__tag {
+      display: inline-block;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: rgba(212,160,23,.15);
+      color: var(--color-oker-dark);
+      border-radius: 99px;
+      padding: .18em .65em;
+      margin-bottom: .45rem;
+    }
+
+    .popup__text {
+      font-size: .84rem;
+      line-height: 1.6;
+      color: #2a2520;
+    }
+
+    /* bring focused popup to front */
+    .popup:focus-within,
+    .popup.is-top {
+      z-index: 10;
+    }
+
+    /* ── Animations ──────────────────────────────────── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── HOME BUTTON (toegevoegd) ─── */
+    .home-btn {
+      position: fixed;
+      top: 1.1rem;
+      right: 1.25rem;
+      z-index: 9999;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45em 1em 0.45em 0.75em;
+      border-radius: 999px;
+      border: 2px solid var(--color-oker, #D4A017);
+      background: var(--color-blauw, #0D1F3C);
+      color: var(--color-oker, #D4A017);
+      font-family: var(--font-body, 'Source Sans 3', sans-serif);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(13,31,60,.35);
+      transition: background .22s ease, color .22s ease,
+                  border-color .22s ease, transform .18s ease,
+                  box-shadow .22s ease;
+    }
+    .home-btn:hover {
+      background: var(--color-oker, #D4A017);
+      color: var(--color-zwart, #111111);
+      border-color: var(--color-oker, #D4A017);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(13,31,60,.45);
+    }
+    .home-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(13,31,60,.3);
+    }
+    .home-btn__icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <span class="eyebrow">Leefstijlcoaching · Begrippen</span>
+    <h1>Begrippenkaart Gedragsverandering</h1>
+    <p>Klik op een begrip voor uitleg. Meerdere kaarten kunnen tegelijk open staan.</p>
+  </header>
+
+  <!-- ╔══════════════════════════════════════════════════════╗
+       ║  HOME BUTTON — HTML (toegevoegd, na </header>)       ║
+       ║  position:fixed zweeft rechtsboven, z-index:9999     ║
+       ║  boven de popup-container (z-index ~10).             ║
+       ╚══════════════════════════════════════════════════════╝ -->
+  <a href="index.html" class="home-btn" title="Terug naar home">
+    <svg class="home-btn__icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 2.5 L2 9h2v8.5h5v-5h2v5h5V9h2L10 2.5z"/>
+    </svg>
+    Home
+  </a>
+  <!-- ╚══════════════════════════════════════════════════════╝ -->
+
+  <div class="term-grid" id="termGrid"></div>
+  <div class="popup-container" id="popupContainer"></div>
+
+  <script>
+  /* ─────────────────────────────────────────────────
+     TERM DATA  (36 terms = 6×6)
+  ───────────────────────────────────────────────── */
+  const terms = [
+    {
+      term: "Attitude",
+      category: "Cognitie",
+      text: "Een attitude is een aangeleerde, positieve of negatieve beoordeling van een gedrag. Een positieve attitude ten aanzien van bewegen vergroot de kans dat iemand daadwerkelijk gaat sporten.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="#1E4080" opacity=".2"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🧭</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#0D1F3C" font-weight="600">Houding</text>`
+    },
+    {
+      term: "Voordelen",
+      category: "Motivatie",
+      text: "Voordelen zijn de positieve consequenties die iemand verwacht van een gedragsverandering. Hoe meer en zwaarder de voordelen wegen, hoe groter de bereidheid tot verandering.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".7"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">✅</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Pros</text>`
+    },
+    {
+      term: "Nadelen",
+      category: "Motivatie",
+      text: "Nadelen zijn de negatieve consequenties die iemand verwacht van verandering. Zolang de nadelen zwaarder wegen dan de voordelen, blijft de motivatie om te veranderen laag.",
+      svgColor: "#b02828",
+      svg: `<circle cx="100" cy="75" r="38" fill="#f8dede" opacity=".7"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">⚠️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#8b1a1a" font-weight="600">Cons</text>`
+    },
+    {
+      term: "Wilskracht",
+      category: "Zelfregulatie",
+      text: "Wilskracht is het vermogen om impulsen te weerstaan en bewuste keuzes te maken. Het is een beperkte hulpbron die uitput bij overgebruik — bekend als 'ego depletion'.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">💪</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Zelfcontrole</text>`
+    },
+    {
+      term: "Motivatie",
+      category: "Psychologie",
+      text: "Motivatie is de drijvende kracht achter doelgericht gedrag. Ze kan extern (beloning, straf) of intern (interesse, waarden) van aard zijn. Intrinsieke motivatie leidt tot duurzamer gedrag.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🔥</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#0D1F3C" font-weight="600">Drijfveer</text>`
+    },
+    {
+      term: "Intrinsieke motivatie",
+      category: "Psychologie",
+      text: "Intrinsieke motivatie komt voort uit innerlijk plezier, nieuwsgierigheid of persoonlijke waarden — niet uit externe beloningen. Het is de sterkste voorspeller van langdurige gedragsverandering.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.18)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">❤️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Van binnen</text>`
+    },
+    {
+      term: "Extrinsieke motivatie",
+      category: "Psychologie",
+      text: "Extrinsieke motivatie is gedrag dat wordt aangestuurd door externe factoren zoals beloningen, punten of sociale goedkeuring. Werkt op korte termijn, maar verdwijnt zodra de prikkel wegvalt.",
+      svgColor: "#163260",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(22,50,96,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🏆</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Van buiten</text>`
+    },
+    {
+      term: "Zelfeffectiviteit",
+      category: "Cognitie",
+      text: "Zelfeffectiviteit is het vertrouwen dat je een specifieke taak succesvol kunt uitvoeren. Hoge zelfeffectiviteit vergroot doorzettingsvermogen en de kans op succes (Bandura, 1977).",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🌟</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Ik kan dit</text>`
+    },
+    {
+      term: "Gewoontevorming",
+      category: "Gedrag",
+      text: "Gewoontevorming is het proces waarbij herhaald gedrag automatisch wordt. Ondersteund door een cue-routine-reward cyclus. Gemiddeld duurt gewoontvorming 66 dagen (Lally et al.).",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">⚙️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Automatisme</text>`
+    },
+    {
+      term: "Ambivalentie",
+      category: "Psychologie",
+      text: "Ambivalentie is het gelijktijdig hebben van tegenstrijdige gevoelens over verandering. Normaal en universeel — de coach helpt de balans naar de gewenste kant te laten doorslaan.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">⚖️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#0D1F3C" font-weight="600">Twijfel</text>`
+    },
+    {
+      term: "Terugval",
+      category: "Gedrag",
+      text: "Terugval is het tijdelijk hervallen in oud gedrag. Geen falen, maar een leermomment. Door triggers te analyseren groeit veerkracht en wordt de volgende poging sterker.",
+      svgColor: "#b02828",
+      svg: `<circle cx="100" cy="75" r="38" fill="#f8dede" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🔄</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#8b1a1a" font-weight="600">Herval</text>`
+    },
+    {
+      term: "Veranderingsbereidheid",
+      category: "Motivatie",
+      text: "Veranderingsbereidheid is de mate waarin iemand klaar en gemotiveerd is om gedrag te veranderen. Het Transtheoretisch Model beschrijft vijf stadia van precontemplatie tot behoud.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🚦</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Klaar voor change</text>`
+    },
+    {
+      term: "Coping",
+      category: "Zelfregulatie",
+      text: "Coping zijn strategieën om met stress, moeilijkheden of verleidingen om te gaan. Probleemgerichte coping pakt de oorzaak aan; emotiegerichte coping reguleert de beleving ervan.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🛡️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Omgaan met stress</text>`
+    },
+    {
+      term: "Trigger",
+      category: "Gedrag",
+      text: "Een trigger is een interne of externe prikkel die een gedragspatroon in gang zet. Triggers herkennen is de eerste stap naar het doorbreken van ongewenste automatische reacties.",
+      svgColor: "#b02828",
+      svg: `<circle cx="100" cy="75" r="38" fill="#f8dede" opacity=".5"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">⚡</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#8b1a1a" font-weight="600">Aanleiding</text>`
+    },
+    {
+      term: "Doelstelling",
+      category: "Coaching",
+      text: "Een doelstelling is een concreet, meetbaar en haalbaar doel dat richting geeft aan gedragsverandering. SMART-doelen verhogen de kans op succes aanzienlijk.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🎯</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Doel</text>`
+    },
+    {
+      term: "Sociale steun",
+      category: "Omgeving",
+      text: "Sociale steun is de emotionele, praktische of informatieve ondersteuning van mensen in iemands netwerk. Sterke sociale steun is een van de krachtigste beschermende factoren bij gedragsverandering.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🤝</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Netwerk</text>`
+    },
+    {
+      term: "Gedragsintentie",
+      category: "Cognitie",
+      text: "Een gedragsintentie is het bewuste plan om een bepaald gedrag uit te voeren. Intenties zijn noodzakelijk maar onvoldoende — de kloof tussen intentie en gedrag heet de 'intention-behaviour gap'.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">📋</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Plan</text>`
+    },
+    {
+      term: "Norm",
+      category: "Omgeving",
+      text: "Een subjectieve norm is de waargenomen sociale druk om een bepaald gedrag al dan niet te vertonen. Wat anderen doen en verwachten beïnvloedt ons gedrag sterker dan we beseffen.",
+      svgColor: "#163260",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(22,50,96,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">👥</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Sociale druk</text>`
+    },
+    {
+      term: "Omgeving",
+      category: "Omgeving",
+      text: "De fysieke en sociale omgeving bepaalt mede welk gedrag makkelijk of moeilijk is. 'Choice architecture' — het bewust inrichten van de omgeving — maakt gezond gedrag de standaardkeuze.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🏡</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Context</text>`
+    },
+    {
+      term: "Zelfregulatie",
+      category: "Zelfregulatie",
+      text: "Zelfregulatie is het vermogen om eigen gedachten, emoties en gedrag te sturen richting een doel. Het omvat zelfmonitoring, zelfevaluatie en zelfcorrectie.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🎛️</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Regie</text>`
+    },
+    {
+      term: "Mindfulness",
+      category: "Zelfregulatie",
+      text: "Mindfulness is het bewust en oordeelvrij aandacht geven aan het huidige moment. Het vergroot het bewustzijn van automatische patronen en vergroot de ruimte tussen prikkel en respons.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🧘</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Aandacht</text>`
+    },
+    {
+      term: "Identiteit",
+      category: "Psychologie",
+      text: "Identiteit verwijst naar wie iemand denkt te zijn. Wanneer nieuw gedrag deel wordt van de identiteit ('ik ben iemand die beweegt'), is het veel stabieler en duurzamer verankerd.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🪞</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Wie ben ik?</text>`
+    },
+    {
+      term: "Waarden",
+      category: "Psychologie",
+      text: "Waarden zijn diepgewortelde overtuigingen over wat iemand belangrijk vindt in het leven. Gedragsverandering die aansluit bij kernwaarden is intrinsiek gemotiveerd en langdurig.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">💎</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Kernwaarden</text>`
+    },
+    {
+      term: "Cognitieve dissonantie",
+      category: "Cognitie",
+      text: "Cognitieve dissonantie is de spanning tussen tegenstrijdige overtuigingen of gedrag. Mensen reduceren dit door gedrag te veranderen, overtuigingen aan te passen, of de tegenstrijdigheid te bagatelliseren.",
+      svgColor: "#b02828",
+      svg: `<circle cx="100" cy="75" r="38" fill="#f8dede" opacity=".5"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🔀</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#8b1a1a" font-weight="600">Spanning</text>`
+    },
+    {
+      term: "Motiverende gespreksvoering",
+      category: "Coaching",
+      text: "Motiverende gespreksvoering (MI) is een cliëntgerichte coachingstijl gericht op het versterken van de eigen motivatie en bereidheid tot verandering door de cliënt zelf aan het woord te laten.",
+      svgColor: "#163260",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(22,50,96,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">💬</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">MI</text>`
+    },
+    {
+      term: "Leefstijl",
+      category: "Gedrag",
+      text: "Leefstijl is het geheel van gewoonten, keuzes en gedragspatronen dat iemands dagelijks leven kenmerkt — voeding, beweging, slaap, stress en sociale relaties.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🌿</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Dagelijks leven</text>`
+    },
+    {
+      term: "Bekrachtiging",
+      category: "Gedrag",
+      text: "Bekrachtiging is het belonen van gewenst gedrag om de kans op herhaling te vergroten. Directe, consistente beloning werkt het sterkst bij het aanleren van nieuwe gewoonten.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🎁</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Beloning</text>`
+    },
+    {
+      term: "Stages of Change",
+      category: "Model",
+      text: "Het Transtheoretisch Model (TTM) beschrijft vijf stadia: precontemplatie, contemplatie, voorbereiding, actie en behoud. Elke fase vraagt een andere coachingsaanpak.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">📊</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">TTM</text>`
+    },
+    {
+      term: "Zelfdeterminatie",
+      category: "Psychologie",
+      text: "De zelfdeterminatietheorie (Deci & Ryan) stelt dat mensen drie basisbehoeften hebben: autonomie, competentie en verbondenheid. Voldoening hieraan bevordert intrinsieke motivatie.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🧩</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">SDT</text>`
+    },
+    {
+      term: "Habit stacking",
+      category: "Gedrag",
+      text: "Habit stacking is een techniek waarbij nieuw gedrag wordt gekoppeld aan een bestaande gewoonte. Voorbeeld: 'Na mijn ochtendkoffie doe ik 5 minuten stretchen.' Vergroot de kans op consistentie.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">📚</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Koppelen</text>`
+    },
+    {
+      term: "Emotieregulatie",
+      category: "Zelfregulatie",
+      text: "Emotieregulatie is het bewust sturen van emotionele reacties. Bij gedragsverandering is het cruciaal: negatieve emoties zijn de meest genoemde trigger voor terugval in oud gedrag.",
+      svgColor: "#163260",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(22,50,96,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🌊</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Emoties sturen</text>`
+    },
+    {
+      term: "Weerstand",
+      category: "Coaching",
+      text: "Weerstand is de neiging van een cliënt om niet mee te gaan in verandering. In MI wordt weerstand niet bestreden maar onderzocht — het signaleert ambivalentie die bespreking verdient.",
+      svgColor: "#b02828",
+      svg: `<circle cx="100" cy="75" r="38" fill="#f8dede" opacity=".5"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🚧</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#8b1a1a" font-weight="600">Verzet</text>`
+    },
+    {
+      term: "Accountability",
+      category: "Coaching",
+      text: "Accountability is het verantwoording afleggen aan een ander over je voortgang. Het vergroot de kans dat iemand zijn intenties daadwerkelijk omzet in gedrag.",
+      svgColor: "#D4A017",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(212,160,23,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">📣</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#A87C0C" font-weight="600">Verantwoording</text>`
+    },
+    {
+      term: "Veerkracht",
+      category: "Psychologie",
+      text: "Veerkracht is het vermogen om te herstellen na tegenslagen. Bij leefstijlverandering is veerkracht cruciaal: wie na terugval snel opstaat, bouwt duurzamer aan gedragsverandering.",
+      svgColor: "#2d7a4a",
+      svg: `<circle cx="100" cy="75" r="38" fill="#d8f0e4" opacity=".6"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">🌱</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a5e35" font-weight="600">Terugveren</text>`
+    },
+    {
+      term: "Gedragscontract",
+      category: "Coaching",
+      text: "Een gedragscontract is een schriftelijke afspraak waarin de cliënt zijn doelen, acties en verantwoordelijkheid vastlegt. Het verhoogt de commitment en biedt een concreet kader voor evaluatie.",
+      svgColor: "#1E4080",
+      svg: `<circle cx="100" cy="75" r="38" fill="rgba(30,64,128,.15)"/>
+        <text x="100" y="60" text-anchor="middle" font-size="28" font-family="sans-serif">📝</text>
+        <text x="100" y="100" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#163260" font-weight="600">Afspraak</text>`
+    }
+  ];
+
+  /* ─────────────────────────────────────────────────
+     BUILD GRID
+  ───────────────────────────────────────────────── */
+  const grid = document.getElementById('termGrid');
+  const container = document.getElementById('popupContainer');
+
+  terms.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'term-btn';
+    btn.dataset.index = i;
+    btn.textContent = t.term;
+    btn.addEventListener('click', () => openPopup(i, btn));
+    grid.appendChild(btn);
+  });
+
+  /* ─────────────────────────────────────────────────
+     POPUP SYSTEM
+  ───────────────────────────────────────────────── */
+  let zCounter = 1;
+  const openPopups = {}; // index → popup element
+
+  function openPopup(index, btn) {
+    // if already open, bring to front
+    if (openPopups[index]) {
+      bringToFront(openPopups[index]);
+      return;
+    }
+
+    const t = terms[index];
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+
+    // position: cascade offset based on number of open popups
+    const count = Object.keys(openPopups).length;
+    const baseX = Math.min(40 + count * 22, window.innerWidth  - 320);
+    const baseY = Math.min(80 + count * 28, window.innerHeight - 380);
+    popup.style.left = baseX + 'px';
+    popup.style.top  = baseY + 'px';
+    popup.style.zIndex = ++zCounter;
+
+    popup.innerHTML = `
+      <div class="popup__header" data-drag>
+        <span class="popup__title">${t.term}</span>
+        <button class="popup__close" title="Sluiten">✕</button>
+      </div>
+      <div class="popup__illus">
+        <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="150" fill="#EDE9E0"/>
+          ${t.svg}
+        </svg>
+      </div>
+      <div class="popup__body">
+        <span class="popup__tag">${t.category}</span>
+        <p class="popup__text">${t.text}</p>
+      </div>`;
+
+    // close button
+    popup.querySelector('.popup__close').addEventListener('click', () => {
+      closePopup(index, btn, popup);
+    });
+
+    // bring to front on click anywhere
+    popup.addEventListener('mousedown', () => bringToFront(popup));
+
+    // dragging
+    makeDraggable(popup, popup.querySelector('[data-drag]'));
+
+    container.appendChild(popup);
+    openPopups[index] = popup;
+    btn.classList.add('is-open');
+  }
+
+  function closePopup(index, btn, popup) {
+    popup.style.animation = 'none';
+    popup.style.transition = 'opacity .18s, transform .18s';
+    popup.style.opacity = '0';
+    popup.style.transform = 'scale(.92) translateY(6px)';
+    setTimeout(() => {
+      popup.remove();
+      delete openPopups[index];
+      btn.classList.remove('is-open');
+    }, 180);
+  }
+
+  function bringToFront(popup) {
+    popup.style.zIndex = ++zCounter;
+  }
+
+  /* ── Drag ───────────────────────────────────────── */
+  function makeDraggable(popup, handle) {
+    let startX, startY, startLeft, startTop;
+
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      bringToFront(popup);
+      startX    = e.clientX;
+      startY    = e.clientY;
+      startLeft = popup.offsetLeft;
+      startTop  = popup.offsetTop;
+
+      const onMove = e => {
+        popup.style.left = (startLeft + e.clientX - startX) + 'px';
+        popup.style.top  = (startTop  + e.clientY - startY) + 'px';
+      };
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    });
+
+    // touch support
+    handle.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      bringToFront(popup);
+      startX    = touch.clientX;
+      startY    = touch.clientY;
+      startLeft = popup.offsetLeft;
+      startTop  = popup.offsetTop;
+
+      const onMove = e => {
+        const t = e.touches[0];
+        popup.style.left = (startLeft + t.clientX - startX) + 'px';
+        popup.style.top  = (startTop  + t.clientY - startY) + 'px';
+      };
+      const onUp = () => {
+        handle.removeEventListener('touchmove', onMove);
+        handle.removeEventListener('touchend',  onUp);
+      };
+      handle.addEventListener('touchmove', onMove, { passive: true });
+      handle.addEventListener('touchend',  onUp);
+    }, { passive: true });
+  }
+  </script>
+
+</body>
+</html>
