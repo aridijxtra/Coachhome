@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De Cliënt-Coach Relatie</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-oker:        #D4A017;
+      --color-oker-light:  #E8C060;
+      --color-oker-dark:   #A87C0C;
+      --color-blauw:       #0D1F3C;
+      --color-blauw-mid:   #163260;
+      --color-blauw-light: #1E4080;
+      --color-zwart:       #111111;
+      --color-wit:         #F7F4EE;
+      --color-grijs-licht: #EDE9E0;
+      --color-grijs:       #C8C4B8;
+      --font-body:         'Source Sans 3', 'Segoe UI', sans-serif;
+      --shadow-sm:         0 2px 6px rgba(13,31,60,.15);
+      --shadow-md:         0 6px 20px rgba(13,31,60,.22);
+      --shadow-lg:         0 16px 48px rgba(13,31,60,.35);
+      --radius-md:         10px;
+      --radius-lg:         18px;
+      --radius-pill:       999px;
+      --transition:        0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-wit);
+      color: var(--color-zwart);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HOME BUTTON ─────────────────────────────── */
+    .home-btn {
+      position: fixed;
+      top: 1.1rem;
+      right: 1.25rem;
+      z-index: 9999;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45em 1em 0.45em 0.75em;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--color-oker);
+      background: var(--color-blauw);
+      color: var(--color-oker);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(13,31,60,.35);
+      transition: background var(--transition), color var(--transition),
+                  border-color var(--transition), transform .18s ease;
+    }
+    .home-btn:hover {
+      background: var(--color-oker);
+      color: var(--color-zwart);
+      border-color: var(--color-oker);
+      transform: translateY(-2px);
+    }
+    .home-btn:active { transform: translateY(0); }
+    .home-btn__icon { width: 14px; height: 14px; flex-shrink: 0; fill: currentColor; }
+
+    /* ── BANNER ──────────────────────────────────── */
+    .site-banner {
+      position: relative;
+      background: var(--color-blauw);
+      color: var(--color-wit);
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+    .site-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, rgba(13,31,60,.95) 0%, rgba(13,31,60,.6) 60%, rgba(13,31,60,.15) 100%);
+      z-index: 1;
+    }
+    .site-banner__inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1000px;
+      margin-inline: auto;
+      padding: 3rem 1.5rem 2.5rem;
+    }
+    .site-banner__eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-oker);
+      margin-bottom: 0.5rem;
+    }
+    .site-banner__title {
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--color-wit);
+      margin-bottom: 0.5rem;
+    }
+    .site-banner__subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--color-grijs-licht);
+      max-width: 62ch;
+      line-height: 1.65;
+    }
+    .site-banner__bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 5px;
+      background: var(--color-oker);
+      z-index: 3;
+    }
+
+    /* ── MAIN ────────────────────────────────────── */
+    .site-main {
+      flex: 1;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+
+    /* ── FRAME GRID ──────────────────────────────── */
+    .frame-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) { .frame-grid { grid-template-columns: 1fr; } }
+
+    /* ── SINGLE FRAME ────────────────────────────── */
+    .frame {
+      background: #fff;
+      border: 2px solid var(--color-grijs-licht);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Frame header strip */
+    .frame__header {
+      background: var(--color-blauw);
+      padding: 1.1rem 1.25rem 1rem;
+      border-bottom: 4px solid var(--color-oker);
+    }
+    .frame__num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-oker-light);
+      margin-bottom: 0.3rem;
+    }
+    .frame__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-wit);
+      line-height: 1.2;
+    }
+
+    /* Frame body with three sections */
+    .frame__body {
+      padding: 0;
+      flex: 1;
+    }
+
+    /* Each sub-section */
+    .frame__section {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--color-grijs-licht);
+    }
+    .frame__section:last-child {
+      border-bottom: none;
+    }
+
+    .frame__section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-blauw-mid);
+      margin-bottom: 0.55rem;
+      padding: 0.2em 0.65em;
+      background: var(--color-grijs-licht);
+      border-radius: var(--radius-pill);
+    }
+
+    .frame__section-label--theorie  { background: rgba(13,31,60,.08);  color: var(--color-blauw-mid); }
+    .frame__section-label--praktijk { background: rgba(212,160,23,.15); color: var(--color-oker-dark); }
+    .frame__section-label--techniek { background: rgba(45,122,74,.12);  color: #1a5e35; }
+
+    .frame__section p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #2a2520;
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .site-footer {
+      background: var(--color-blauw);
+      color: var(--color-grijs);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      border-top: 5px solid var(--color-oker);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER -->
+  <header class="site-banner">
+    <div class="site-banner__inner">
+      <span class="site-banner__eyebrow">Leefstijlcoaching · Professionele relatie</span>
+      <h1 class="site-banner__title">De cliënt-coach relatie</h1>
+      <p class="site-banner__subtitle">De relatie tussen coach en cliënt is niet alleen de context van coaching — zij ís het instrument. Hoe je die relatie vormgeeft, bepaalt in hoge mate wat je als coach bereikt.</p>
+    </div>
+    <div class="site-banner__bar"></div>
+  </header>
+
+  <!-- HOME BUTTON — na </header> om overflow:hidden clipping te vermijden -->
+  <a href="index.html" class="home-btn" title="Terug naar home">
+    <svg class="home-btn__icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 2.5 L2 9h2v8.5h5v-5h2v5h5V9h2L10 2.5z"/>
+    </svg>
+    Home
+  </a>
+
+  <main class="site-main">
+    <div class="container">
+
+      <div class="frame-grid">
+
+        <!-- ── FRAME 1: Relatie als kanaal ── -->
+        <div class="frame">
+          <div class="frame__header">
+            <div class="frame__num">Thema 1</div>
+            <div class="frame__title">Relatie als kanaal</div>
+          </div>
+          <div class="frame__body">
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--theorie">📖 Theorie</span>
+              <p>De therapeutische alliantie — het gevoel van samenwerking, vertrouwen en overeenstemming over doelen en methoden — is in de psychologie een van de sterkste voorspellers van behandeluitkomst. Dit geldt ook voor coaching. Onderzoek van Bordin (1979) beschrijft de alliantie als de samenwerking op drie niveaus: de emotionele band, overeenstemming over doelen en overeenstemming over de aanpak. Zonder een goede alliantie dringen interventies niet door, worden adviezen niet opgevolgd en haken cliënten vroegtijdig af. De relatie is dus niet een prettige bijkomstigheid — zij is de drager van alle andere interventies.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--praktijk">💼 Praktijk</span>
+              <p>In de praktijk betekent dit dat de coach actief investeert in de kwaliteit van de relatie, al vanaf het eerste contact. Een warme, niet-oordelende houding, echte interesse in de cliënt als persoon, en consistentie in woord en daad leggen de basis. Als de relatie kraakt — door onverwacht gedrag, teleurstellingen of miscommunicatie — is dat geen reden om de coaching te stoppen, maar een onderwerp om bespreekbaar te maken. Juist het herstellen van de alliantie verdiept het vertrouwen.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--techniek">🛠 Technieken</span>
+              <p>Gebruik <strong>reflectief luisteren</strong> om te laten merken dat je de cliënt echt begrijpt. Stel vragen als 'Hoe ervaart u onze samenwerking tot nu toe?' om de alliantie expliciet te bespreken. Check regelmatig of de doelen en aanpak nog overeenkomen met wat de cliënt wil. Gebruik <strong>rupture-repair</strong> technieken als er spanning ontstaat: erken het, bespreek het open en herstel het gezamenlijk.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── FRAME 2: Samenwerken ── -->
+        <div class="frame">
+          <div class="frame__header">
+            <div class="frame__num">Thema 2</div>
+            <div class="frame__title">Samenwerken</div>
+          </div>
+          <div class="frame__body">
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--theorie">📖 Theorie</span>
+              <p>Effectieve coaching is geen eenrichtingsverkeer waarbij de expert vertelt wat de cliënt moet doen. Het is een gelijkwaardige samenwerking waarbij de coach expertise inbrengt en de cliënt kennis over zijn eigen leven, waarden en mogelijkheden. De zelfdeterminatietheorie (Deci & Ryan) benadrukt dat autonomie — het gevoel zelf te beslissen — essentieel is voor intrinsieke motivatie. Een coachingstijl die autonomie ondersteunt leidt tot duurzamere gedragsverandering dan een sturende of adviserende stijl. De cliënt is expert op zijn eigen leven; de coach is expert in het veranderingsproces.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--praktijk">💼 Praktijk</span>
+              <p>Samenwerken betekent dat coach en cliënt samen de agenda bepalen, samen doelen formuleren en samen evalueren. De coach vermijdt het geven van ongewraagde adviezen en stelt in plaats daarvan vragen die de cliënt uitnodigen zijn eigen oplossingen te vinden. Als de coach wil adviseren, vraagt hij eerst toestemming: 'Mag ik een idee delen?' Dit respecteert de autonomie van de cliënt en vergroot de kans dat het advies ook wordt opgevolgd.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--techniek">🛠 Technieken</span>
+              <p>Gebruik de <strong>menu-techniek</strong>: bied meerdere opties aan en laat de cliënt kiezen. Pas <strong>agenda setting</strong> toe door te vragen: 'Wat wil jij vandaag bereiken?' Gebruik <strong>open vragen</strong> die de cliënt uitnodigen na te denken, in plaats van gesloten vragen die een ja of nee uitlokken. Geef <strong>positieve bekrachtiging</strong> wanneer de cliënt initiatief neemt of een eigen oplossing formuleert.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── FRAME 3: De echte relatie ── -->
+        <div class="frame">
+          <div class="frame__header">
+            <div class="frame__num">Thema 3</div>
+            <div class="frame__title">De echte relatie</div>
+          </div>
+          <div class="frame__body">
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--theorie">📖 Theorie</span>
+              <p>Naast de professionele alliantie bestaat er een 'echte' persoonlijke relatie tussen coach en cliënt — gebaseerd op oprechte betrokkenheid, empathie en menselijke aanwezigheid. Carl Rogers beschreef drie kernkwaliteiten van de effectieve helper: <strong>onvoorwaardelijke positieve acceptatie</strong>, <strong>empathie</strong> en <strong>congruentie</strong> (authenticiteit). Een coach die deze kwaliteiten belichaamt creëert een veilige ruimte waarin de cliënt eerlijk durft te zijn over wat er echt speelt — ook de moeilijke, beschamende of ambivalente dingen.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--praktijk">💼 Praktijk</span>
+              <p>De echte relatie vraagt dat de coach aanwezig is als mens, niet alleen als professional met een protocol. Dit betekent: contact maken vóór je aan de slag gaat, persoonlijke betrokkenheid tonen, en soms gewoon stilte laten vallen. Het betekent ook eerlijk zijn als iets niet werkt, en de moed hebben om moeilijke dingen bespreekbaar te maken. Cliënten voelen feilloos het verschil tussen een coach die echt geïnteresseerd is en een die zijn checklist afwerkt.</p>
+            </div>
+
+            <div class="frame__section">
+              <span class="frame__section-label frame__section-label--techniek">🛠 Technieken</span>
+              <p>Oefen <strong>presentiegerichte aandacht</strong>: leg devices weg, maak oogcontact, geef de cliënt de volle ruimte. Gebruik <strong>empathische reflecties</strong> die verder gaan dan inhoud: 'Ik hoor hoe zwaar dat voor je is.' Durf als coach iets van jezelf te delen als dat de relatie verdiept (<strong>zelfonthulling</strong>). Beëindig elke sessie met een <strong>check-out</strong>: 'Hoe ga je hier vandaan?' Zo sluit je de mens, niet alleen de agenda.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /frame-grid -->
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> CoachPortaal · De cliënt-coach relatie</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
