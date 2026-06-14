@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Het Zelfregulatie Model van Leefstijlverandering</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-oker:        #D4A017;
+      --color-oker-light:  #E8C060;
+      --color-oker-dark:   #A87C0C;
+      --color-blauw:       #0D1F3C;
+      --color-blauw-mid:   #163260;
+      --color-blauw-light: #1E4080;
+      --color-zwart:       #111111;
+      --color-wit:         #F7F4EE;
+      --color-grijs-licht: #EDE9E0;
+      --color-grijs:       #C8C4B8;
+      --font-body:         'Source Sans 3', 'Segoe UI', sans-serif;
+      --shadow-sm:         0 2px 6px rgba(13,31,60,.15);
+      --shadow-md:         0 6px 20px rgba(13,31,60,.22);
+      --shadow-lg:         0 16px 48px rgba(13,31,60,.38);
+      --radius-md:         10px;
+      --radius-lg:         18px;
+      --radius-pill:       999px;
+      --transition:        0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-wit);
+      color: var(--color-zwart);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HOME BUTTON ─────────────────────────────── */
+    .home-btn {
+      position: fixed;
+      top: 1.1rem;
+      right: 1.25rem;
+      z-index: 9999;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45em 1em 0.45em 0.75em;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--color-oker);
+      background: var(--color-blauw);
+      color: var(--color-oker);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(13,31,60,.35);
+      transition: background var(--transition), color var(--transition),
+                  border-color var(--transition), transform .18s ease;
+    }
+    .home-btn:hover {
+      background: var(--color-oker);
+      color: var(--color-zwart);
+      border-color: var(--color-oker);
+      transform: translateY(-2px);
+    }
+    .home-btn:active { transform: translateY(0); }
+    .home-btn__icon { width: 14px; height: 14px; flex-shrink: 0; fill: currentColor; }
+
+    /* ── BANNER ──────────────────────────────────── */
+    .site-banner {
+      position: relative;
+      background: var(--color-blauw);
+      color: var(--color-wit);
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+    .site-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, rgba(13,31,60,.95) 0%, rgba(13,31,60,.6) 60%, rgba(13,31,60,.2) 100%);
+      z-index: 1;
+    }
+    .site-banner__inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1000px;
+      margin-inline: auto;
+      padding: 3rem 1.5rem 2.5rem;
+    }
+    .site-banner__eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-oker);
+      margin-bottom: 0.5rem;
+    }
+    .site-banner__title {
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--color-wit);
+      margin-bottom: 0.5rem;
+    }
+    .site-banner__subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--color-grijs-licht);
+      max-width: 60ch;
+      line-height: 1.6;
+    }
+    .site-banner__bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 5px;
+      background: var(--color-oker);
+      z-index: 3;
+    }
+
+    /* ── MAIN ────────────────────────────────────── */
+    .site-main {
+      flex: 1;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      margin-inline: auto;
+    }
+
+    /* ── INTRO TEXT ──────────────────────────────── */
+    .intro-text {
+      font-size: 0.97rem;
+      line-height: 1.75;
+      color: #2a2520;
+      max-width: 72ch;
+      margin-bottom: 2rem;
+    }
+    .intro-text strong { color: var(--color-blauw); }
+
+    .divider {
+      border: none;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-oker), var(--color-blauw));
+      border-radius: var(--radius-pill);
+      margin: 0 0 2rem;
+    }
+
+    /* ── HINT ────────────────────────────────────── */
+    .diagram-hint {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-oker-dark);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ── DIAGRAM WRAPPER ─────────────────────────── */
+    .diagram-wrap {
+      background: #fdf8ee;
+      border: 2px solid var(--color-grijs-licht);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      padding: 1.5rem;
+    }
+
+    .diagram-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Clickable boxes glow on hover */
+    .diagram-wrap svg .clickable {
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .diagram-wrap svg .clickable:hover rect {
+      filter: drop-shadow(0 0 6px rgba(212,160,23,0.7));
+    }
+
+    /* ── MODAL ───────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,31,60,.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      cursor: pointer;
+    }
+    .modal-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      position: relative;
+      background: var(--color-wit);
+      color: var(--color-zwart);
+      border-radius: 20px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      transform: scale(.94) translateY(16px);
+      transition: transform .32s cubic-bezier(.34,1.3,.64,1);
+      cursor: default;
+    }
+    .modal-overlay.is-open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      background: var(--color-blauw);
+      padding: 1rem 1.25rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 3px solid var(--color-oker);
+    }
+    .modal-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-oker);
+      color: var(--color-zwart);
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-wit);
+      flex: 1;
+    }
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(212,160,23,.2);
+      color: var(--color-oker);
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), transform .2s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover {
+      background: var(--color-oker);
+      color: var(--color-blauw);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .modal-body {
+      padding: 1.5rem 1.6rem 1.8rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.93rem;
+      line-height: 1.72;
+      color: #2a2520;
+    }
+    .modal-body p + p { margin-top: 0.75rem; }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .site-footer {
+      background: var(--color-blauw);
+      color: var(--color-grijs);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      border-top: 5px solid var(--color-oker);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER -->
+  <header class="site-banner">
+    <div class="site-banner__inner">
+      <span class="site-banner__eyebrow">Leefstijlcoaching · Theorie</span>
+      <h1 class="site-banner__title">Het zelfregulatie model van leefstijlverandering</h1>
+      <p class="site-banner__subtitle">Leer hoe mensen hun gedrag veranderen met zelfregulatie. Dit is het werkpallet van de leefstijlcoach.</p>
+    </div>
+    <div class="site-banner__bar"></div>
+  </header>
+
+  <!-- HOME BUTTON — after </header> to avoid overflow:hidden clipping -->
+  <a href="index.html" class="home-btn" title="Terug naar home">
+    <svg class="home-btn__icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 2.5 L2 9h2v8.5h5v-5h2v5h5V9h2L10 2.5z"/>
+    </svg>
+    Home
+  </a>
+
+  <main class="site-main">
+    <div class="container">
+
+      <p class="intro-text">
+        Het <strong>zelfregulatie model</strong> beschrijft hoe mensen stap voor stap hun gedrag kunnen veranderen. Het model toont gedragsverandering als een <strong>cyclisch proces</strong> van dertien samenhangende stappen — van kennis en waarden via motivatie en planning naar uitvoering, monitoren en leren. Centraal staat de <strong>discrepantie</strong>: het ervaren verschil tussen hoe iemand nu handelt en wat hij of zij eigenlijk wil. Die spanning zet de motor van verandering in gang.
+        <br><br>
+        Voor de leefstijlcoach is dit model een <strong>werkpallet</strong>: het helpt te identificeren waar in het proces een cliënt vastloopt. Iemand kan wel gemotiveerd zijn maar geen concrete doelen stellen. Of hij heeft een plan maar faalt in zelfcontrole. Of hij voert het gedrag uit maar monitort niet en leert dus niet van terugval. Door te weten in welke stap de keten breekt, kan de coach zijn interventie precies daar richten — effectief en op maat.
+        <br><br>
+        Klik op een box om meer te leren over dat onderdeel van het model.
+      </p>
+
+      <hr class="divider" />
+
+      <div class="diagram-hint">👆 Klik op een box voor uitleg</div>
+
+      <div class="diagram-wrap">
+        <svg id="modelSvg" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" font-family="'Source Sans 3',sans-serif">
+          <defs>
+            <marker id="a5" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L5,2.5 z" fill="#111"/>
+            </marker>
+            <marker id="a5up" markerWidth="5" markerHeight="5" refX="1" refY="2.5" orient="auto">
+              <path d="M5,0 L5,5 L0,2.5 z" fill="#111"/>
+            </marker>
+          </defs>
+          <rect width="560" height="320" fill="#fdf8ee" rx="8"/>
+
+          <!-- ═══ ARROWS (drawn first, behind boxes) ═══ -->
+          <!-- 3→4 -->
+          <line x1="212" y1="40" x2="228" y2="40" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 4→5 -->
+          <line x1="308" y1="40" x2="324" y2="40" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 5→6 -->
+          <line x1="408" y1="40" x2="424" y2="40" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 6↓→7 -->
+          <line x1="464" y1="62" x2="464" y2="80" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 7↓→8 -->
+          <line x1="456" y1="126" x2="456" y2="197" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 7↓→9 -->
+          <line x1="470" y1="126" x2="470" y2="260" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 2↕1 double-headed -->
+          <line x1="74" y1="146" x2="74" y2="162" stroke="#111" stroke-width="1.5" marker-start="url(#a5up)" marker-end="url(#a5)"/>
+          <!-- horizontal arrow from between 1&2 to discrepantie -->
+          <line x1="80" y1="154" x2="160" y2="154" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 13↑→3 -->
+          <line x1="162" y1="136" x2="162" y2="62" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 13→8 diagonal -->
+          <line x1="266" y1="158" x2="393" y2="197" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 8→10 -->
+          <line x1="332" y1="220" x2="276" y2="284" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 9↑→8 -->
+          <line x1="430" y1="260" x2="430" y2="243" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 10→11 -->
+          <line x1="192" y1="284" x2="175" y2="284" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 11→12 -->
+          <line x1="97" y1="284" x2="82" y2="284" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+          <!-- 12↑→1 -->
+          <line x1="50" y1="265" x2="50" y2="208" stroke="#111" stroke-width="1.5" marker-end="url(#a5)"/>
+
+          <!-- ═══ CLICKABLE BOXES ═══ -->
+
+          <!-- 3. Probleem oplossen -->
+          <g class="box-group" data-id="3" style="cursor:pointer">
+            <rect x="112" y="18" width="100" height="44" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="121" cy="27" r="7" fill="#222"/>
+            <text x="121" y="31.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">3</text>
+            <text x="162" y="37" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Probleem</text>
+            <text x="162" y="50" text-anchor="middle" font-size="9" font-weight="600" fill="#111">oplossen</text>
+          </g>
+
+          <!-- 4. Motivatie -->
+          <g class="box-group" data-id="4" style="cursor:pointer">
+            <rect x="228" y="18" width="80" height="44" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="237" cy="27" r="7" fill="#222"/>
+            <text x="237" y="31.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">4</text>
+            <text x="268" y="43" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Motivatie</text>
+          </g>
+
+          <!-- 5. Doelstellen -->
+          <g class="box-group" data-id="5" style="cursor:pointer">
+            <rect x="324" y="18" width="84" height="44" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="333" cy="27" r="7" fill="#222"/>
+            <text x="333" y="31.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">5</text>
+            <text x="366" y="43" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Doelstellen</text>
+          </g>
+
+          <!-- 6. Plannen -->
+          <g class="box-group" data-id="6" style="cursor:pointer">
+            <rect x="424" y="18" width="80" height="44" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="433" cy="27" r="7" fill="#222"/>
+            <text x="433" y="31.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">6</text>
+            <text x="464" y="43" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Plannen</text>
+          </g>
+
+          <!-- 7. Implementatie intentie -->
+          <g class="box-group" data-id="7" style="cursor:pointer">
+            <rect x="416" y="80" width="108" height="46" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="425" cy="89" r="7" fill="#222"/>
+            <text x="425" y="93.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">7</text>
+            <text x="470" y="101" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Implementatie</text>
+            <text x="470" y="114" text-anchor="middle" font-size="9" font-weight="600" fill="#111">intentie</text>
+          </g>
+
+          <!-- 2. Waarden/doelen -->
+          <g class="box-group" data-id="2" style="cursor:pointer">
+            <rect x="16" y="108" width="110" height="38" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="25" cy="117" r="7" fill="#222"/>
+            <text x="25" y="121.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">2</text>
+            <text x="71" y="131" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Waarden/doelen</text>
+          </g>
+
+          <!-- 1. Kennis over het gedrag -->
+          <g class="box-group" data-id="1" style="cursor:pointer">
+            <rect x="16" y="162" width="110" height="46" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="25" cy="171" r="7" fill="#222"/>
+            <text x="25" y="175.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">1</text>
+            <text x="71" y="183" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Kennis over het</text>
+            <text x="71" y="198" text-anchor="middle" font-size="9" font-weight="600" fill="#111">gedrag</text>
+          </g>
+
+          <!-- 13. Discrepantie -->
+          <g class="box-group" data-id="13" style="cursor:pointer">
+            <rect x="160" y="136" width="106" height="38" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="169" cy="145" r="7" fill="#222"/>
+            <text x="169" y="149.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">13</text>
+            <text x="213" y="159" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Discrepantie</text>
+          </g>
+
+          <!-- 8. Uitvoering gedrag -->
+          <g class="box-group" data-id="8" style="cursor:pointer">
+            <rect x="332" y="197" width="130" height="46" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="341" cy="206" r="7" fill="#222"/>
+            <text x="341" y="210.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">8</text>
+            <text x="397" y="218" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Uitvoering</text>
+            <text x="397" y="232" text-anchor="middle" font-size="9" font-weight="600" fill="#111">gedrag</text>
+          </g>
+
+          <!-- 9. Zelfcontrole gedrag -->
+          <g class="box-group" data-id="9" style="cursor:pointer">
+            <rect x="416" y="260" width="108" height="44" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="425" cy="269" r="7" fill="#222"/>
+            <text x="425" y="273.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">9</text>
+            <text x="470" y="280" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Zelfcontrole</text>
+            <text x="470" y="294" text-anchor="middle" font-size="9" font-weight="600" fill="#111">gedrag</text>
+          </g>
+
+          <!-- 10. Monitoren -->
+          <g class="box-group" data-id="10" style="cursor:pointer">
+            <rect x="192" y="265" width="84" height="38" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="201" cy="274" r="7" fill="#222"/>
+            <text x="201" y="278.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">10</text>
+            <text x="234" y="288" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Monitoren</text>
+          </g>
+
+          <!-- 11. Evalueren -->
+          <g class="box-group" data-id="11" style="cursor:pointer">
+            <rect x="97" y="265" width="78" height="38" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="106" cy="274" r="7" fill="#222"/>
+            <text x="106" y="278.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">11</text>
+            <text x="136" y="288" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Evalueren</text>
+          </g>
+
+          <!-- 12. Leren -->
+          <g class="box-group" data-id="12" style="cursor:pointer">
+            <rect x="18" y="265" width="64" height="38" rx="7" fill="white" stroke="#222" stroke-width="1.6" class="box-rect"/>
+            <circle cx="27" cy="274" r="7" fill="#222"/>
+            <text x="27" y="278.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">12</text>
+            <text x="50" y="288" text-anchor="middle" font-size="9" font-weight="600" fill="#111">Leren</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- Button to leertheorie.html -->
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="leertheorie.html" style="
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75em 2em;
+          border-radius: 999px;
+          border: 2px solid var(--color-blauw);
+          background: var(--color-blauw);
+          color: var(--color-oker);
+          font-family: var(--font-body);
+          font-size: 0.95rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          text-decoration: none;
+          box-shadow: 0 4px 16px rgba(13,31,60,.25);
+          transition: background 0.22s ease, transform 0.18s ease;
+        "
+        onmouseover="this.style.background='#D4A017';this.style.color='#111';this.style.borderColor='#D4A017';this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.background='#0D1F3C';this.style.color='#D4A017';this.style.borderColor='#0D1F3C';this.style.transform='translateY(0)'">
+          🎮 Simuleer het leren door ervaring
+        </a>
+      </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal-card" id="modalCard">
+      <div class="modal-header">
+        <div class="modal-num" id="modalNum">1</div>
+        <div class="modal-title" id="modalTitle">Titel</div>
+        <button class="modal-close" onclick="closeModal()" title="Sluiten">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> CoachPortaal · Het Zelfregulatie Model</p>
+  </footer>
+
+  <script>
+  /* ─────────────────────────────────────────────
+     BOX CONTENT DATA
+  ───────────────────────────────────────────── */
+  const boxData = {
+    1: {
+      title: "Kennis over het gedrag",
+      text: `<p>Kennis over gedrag is de eerste schakel in het zelfregulatie proces. Het gaat om wat iemand weet over zijn eigen gedrag: hoe vaak doet hij het, wat zijn de effecten, welke triggers spelen een rol?</p>
+      <p>Zonder accurate kennis over het eigen gedrag is verandering moeilijk te sturen. Veel mensen overschatten of onderschatten hoe ze zich gedragen — ze denken gezonder te eten dan ze doen, of bewegen meer in hun hoofd dan in werkelijkheid.</p>
+      <p>De coach helpt de cliënt zijn gedrag objectief in kaart te brengen, bijvoorbeeld via een dagboek, meting of reflectie. Pas als iemand helder ziet wat hij werkelijk doet, kan de vergelijking met waarden en doelen een echte discrepantie opleveren.</p>`
+    },
+    2: {
+      title: "Waarden en doelen",
+      text: `<p>Waarden zijn de diepste drijfveren van een persoon: gezondheid, autonomie, betrokkenheid bij het gezin, vitaliteit, zelfrespect. Ze zijn stabiel en sterk motiverend — juist omdat ze niet opgelegd zijn van buitenaf.</p>
+      <p>Doelen zijn de concrete vertaling van waarden: 'Ik wil energiek zijn voor mijn kinderen' wordt 'Ik wil drie keer per week bewegen'. De wisselwerking tussen waarden en kennis over gedrag is cruciaal: pas als iemand zijn huidige gedrag vergelijkt met wat hij echt belangrijk vindt, ervaart hij de motiverende spanning die tot actie aanzet.</p>
+      <p>De coach helpt waarden te verhelderen en te verbinden aan haalbare, betekenisvolle doelen.</p>`
+    },
+    3: {
+      title: "Probleem oplossen",
+      text: `<p>Wanneer de discrepantie groot is maar de motivatie onvoldoende of de weg onduidelijk, activeert het model de stap 'probleem oplossen'. Dit is een creatief en analytisch proces waarin gezocht wordt naar de oorzaken van het probleem en naar mogelijke oplossingen.</p>
+      <p>Probleemoplossing kan worden ingezet als iemand vastloopt — als eerdere pogingen zijn mislukt, als de situatie veranderd is, of als er obstakels zijn die de uitvoering blokkeren. De coach faciliteert dit proces door de juiste vragen te stellen, alternatieven te verkennen en de cliënt te helpen nieuwe wegen te zien.</p>
+      <p>Goede probleemoplossing leidt terug naar hernieuwd motivatie en doelstelling.</p>`
+    },
+    4: {
+      title: "Motivatie",
+      text: `<p>Motivatie is de bereidheid om energie te investeren in gedragsverandering. In dit model is motivatie geen vast persoonskenmerk maar een toestand die varieert en beïnvloed kan worden.</p>
+      <p>Motivatie wordt gevoed door de discrepantie tussen huidig gedrag en waarden/doelen. Hoe groter en pijnlijker die kloof wordt ervaren, hoe sterker de motivatie. De coach kan motivatie versterken door de voordelen van verandering te verhelderen, de nadelen te relativeren en het vertrouwen in eigen kunnen te vergroten.</p>
+      <p>Motiverende gespreksvoering (MI) is een evidencebased methode die precies op dit punt interveniëert door de cliënt zijn eigen redenen voor verandering te laten uitspreken.</p>`
+    },
+    5: {
+      title: "Doelstellen",
+      text: `<p>Doelstelling is het omzetten van motivatie in een concreet, haalbaar voornemen. Een goed doel geeft richting, maatstaf en focus. Onderzoek toont consistent aan dat specifieke, uitdagende doelen tot betere prestaties leiden dan vage of makkelijke doelen.</p>
+      <p>SMART-doelen (Specifiek, Meetbaar, Acceptabel, Realistisch, Tijdgebonden) zijn een beproefde methode. Maar ook de kwaliteit van het doel telt: een doel dat aansluit bij de eigen waarden werkt krachtiger dan een extern opgelegd doel.</p>
+      <p>De coach helpt de cliënt doelen te formuleren die uitdagend maar haalbaar zijn, en die dichtbij de persoonlijke motivatie liggen.</p>`
+    },
+    6: {
+      title: "Plannen",
+      text: `<p>Plannen is de brug tussen intentie en actie. Een plan bepaalt wanneer, waar en hoe het gedrag uitgevoerd zal worden. Zonder plan blijft een goede intentie kwetsbaar voor de waan van de dag, verleidingen en vergeten.</p>
+      <p>Plannen vergroot de kans op uitvoering aanzienlijk. Een goed plan is concreet ('na het avondeten ga ik 20 minuten wandelen'), haalbaar en afgestemd op de dagelijkse realiteit van de cliënt. De coach helpt bij het ontwerpen van een plan dat past bij de leefomgeving, gewoonten en mogelijkheden van de cliënt.</p>`
+    },
+    7: {
+      title: "Implementatie intentie",
+      text: `<p>Een implementatie-intentie is een specifiek als-dan-plan: <em>'Als situatie X zich voordoet, dan voer ik gedrag Y uit.'</em> Onderzoek van Peter Gollwitzer toont aan dat zulke plannen de kans op uitvoering dramatisch vergroten — zelfs bij mensen met lage motivatie.</p>
+      <p>Het mechanisme is automatisering: door de koppeling van een situatie aan een respons vooraf vast te leggen, wordt het gedrag minder afhankelijk van bewuste keuze op het moment zelf. Bijvoorbeeld: 'Als ik 's ochtends opstaat, doe ik direct mijn sportschoenen aan.' De coach helpt de cliënt zulke concrete triggers te identificeren en te koppelen aan het gewenste gedrag.</p>`
+    },
+    8: {
+      title: "Uitvoering gedrag",
+      text: `<p>Uitvoering is het daadwerkelijk stellen van het gewenste gedrag. Dit is de kern van het model — maar ook de stap waar het het meest mis kan gaan. Uitvoering vereist niet alleen motivatie en planning, maar ook zelfcontrole, een ondersteunende omgeving en het overwinnen van concurrerende impulsen.</p>
+      <p>De coach monitort of de uitvoering daadwerkelijk plaatsvindt en helpt obstakels te identificeren. Soms faalt uitvoering door verkeerde implementatie-intenties, soms door onverwachte situaties, soms door emotionele triggers. Elk van deze obstakels vraagt een eigen aanpak.</p>
+      <p>Succesvolle uitvoering, hoe klein ook, is de basis voor verdere gedragsverandering en groeiend zelfvertrouwen.</p>`
+    },
+    9: {
+      title: "Zelfcontrole gedrag",
+      text: `<p>Zelfcontrole is het vermogen om impulsen te weerstaan en het gewenste gedrag vol te houden, ook als dat moeite kost of minder aantrekkelijk voelt. Het is nauw verbonden met de uitvoering van gedrag en vormt de interne 'bewaker' van het veranderproces.</p>
+      <p>Zelfcontrole is uitputbaar: bij chronische stress, slaaptekort of overmatige beslissingsdruk neemt het af. De coach helpt de cliënt zijn zelfcontrole te beschermen door routines te bouwen, verleidingen te verminderen en de omgeving zo in te richten dat het gewenste gedrag de makkelijkste keuze is.</p>
+      <p>Op lange termijn vermindert de noodzaak voor zelfcontrole naarmate gedrag automatischer wordt.</p>`
+    },
+    10: {
+      title: "Monitoren",
+      text: `<p>Monitoren is het systematisch bijhouden van het eigen gedrag: wat deed ik, wanneer, hoe vaak, met welk resultaat? Monitoring is een krachtige interventie op zich — mensen die hun gedrag bijhouden veranderen al door het feit van de observatie.</p>
+      <p>Monitoring maakt de discrepantie zichtbaar, levert data voor evaluatie en vergroot het bewustzijn van patronen en triggers. Moderne technologie biedt talloze mogelijkheden: stappentellers, voedingsdagboeken, apps, wearables.</p>
+      <p>De coach helpt de cliënt een monitoringsysteem te kiezen dat haalbaar is en dat informatie oplevert die echt bruikbaar is voor evaluatie en bijsturing.</p>`
+    },
+    11: {
+      title: "Evalueren",
+      text: `<p>Evaluatie is de stap waarin de cliënt terugkijkt op zijn gedrag en de resultaten vergelijkt met zijn doelen. Was het gedrag succesvol? Wat ging goed, wat niet? Welke factoren speelden een rol?</p>
+      <p>Evaluatie zonder oordeel is de sleutel: het gaat niet om zelfkritiek maar om leren. Een goede evaluatie is eerlijk, specifiek en constructief. Ze levert inzichten op voor de volgende cyclus.</p>
+      <p>De coach faciliteert evaluatie door de juiste vragen te stellen en de cliënt te helpen patronen te herkennen. Evaluatie sluit de lus en maakt de cyclus af — waarna het leren start.</p>`
+    },
+    12: {
+      title: "Leren",
+      text: `<p>Leren is de stap die de cyclus sluit en tegelijk verbetert. Op basis van de evaluatie past de cliënt zijn kennis, plannen, doelen of strategieën aan. Elke ronde door de cyclus levert nieuwe inzichten op die de volgende poging effectiever maken.</p>
+      <p>Leren omvat ook leren van terugval: een terugval is geen falen maar informatie. Wat waren de triggers? Wat had anders gekund? Wat heeft de cliënt over zichzelf geleerd?</p>
+      <p>De coach helpt de cliënt dit leren te articuleren en te integreren. Zo groeit de cliënt niet alleen in gedrag maar ook in zelfkennis en veerkracht — de diepste basis voor duurzame leefstijlverandering.</p>`
+    },
+    13: {
+      title: "Discrepantie",
+      text: `<p>Discrepantie is het ervaren verschil tussen hoe iemand nu gedraagt en wat hij of zij eigenlijk wil op basis van zijn waarden en doelen. Dit ervaren verschil is de eigenlijke motor van gedragsverandering — het creëert een spanning die om oplossing vraagt.</p>
+      <p>Geen discrepantie betekent geen motivatie om te veranderen. Te grote discrepantie kan leiden tot hopeloosheid of vermijding. De optimale discrepantie is groot genoeg om te motiveren, maar niet zo overweldigend dat ze verlamt.</p>
+      <p>De coach helpt de cliënt de discrepantie bewust te maken en op het juiste niveau te houden. Dit is precies de reden waarom zowel kennis over gedrag als kennis over eigen waarden zo cruciaal zijn: alleen als beide helder zijn, kan de discrepantie haar werk doen.</p>`
+    }
+  };
+
+  /* ─────────────────────────────────────────────
+     CLICK HANDLERS
+  ───────────────────────────────────────────── */
+  document.querySelectorAll('.box-group').forEach(g => {
+    g.addEventListener('click', () => openModal(g.dataset.id));
+
+    // Hover highlight
+    const rect = g.querySelector('.box-rect');
+    g.addEventListener('mouseenter', () => {
+      rect.setAttribute('stroke', '#D4A017');
+      rect.setAttribute('stroke-width', '2.5');
+      rect.setAttribute('fill', '#fffdf5');
+    });
+    g.addEventListener('mouseleave', () => {
+      rect.setAttribute('stroke', '#222');
+      rect.setAttribute('stroke-width', '1.6');
+      rect.setAttribute('fill', 'white');
+    });
+  });
+
+  function openModal(id) {
+    const d = boxData[id];
+    if (!d) return;
+    document.getElementById('modalNum').textContent = id;
+    document.getElementById('modalTitle').textContent = d.title;
+    document.getElementById('modalBody').innerHTML = d.text;
+    document.getElementById('modalOverlay').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  window.closeModal = closeModal;
+  window.handleOverlayClick = handleOverlayClick;
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
